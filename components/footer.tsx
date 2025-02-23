@@ -1,17 +1,11 @@
 import { buttonVariants } from "@/components/ui/button";
-import {
-  GitHubLogoIcon,
-  LinkedInLogoIcon,
-  TwitterLogoIcon,
-} from "@radix-ui/react-icons";
+import { LinkedInLogoIcon } from "@radix-ui/react-icons";
 import Link from "next/link";
 
 export function Footer(props: {
-  builtBy: string;
-  builtByLink: string;
-  githubLink: string;
-  twitterLink: string;
-  linkedinLink: string;
+  readonly builtBy: string;
+  readonly builtByLink: string;
+  readonly linkedinLink: string;
 }) {
   return (
     <footer className="border-t">
@@ -25,28 +19,15 @@ export function Footer(props: {
               rel="noreferrer"
               className="font-medium underline underline-offset-4"
             >
-              {props.builtBy}
-            </a>
-            . The source code is available on{" "}
-            <a
-              href={props.githubLink}
-              target="_blank"
-              rel="noreferrer"
-              className="font-medium underline underline-offset-4"
-            >
-              GitHub
-            </a>
-            .
+              {" "}
+              {props.builtBy}{" "}
+            </a>.
           </p>
         </div>
 
         <div className="flex items-center space-x-1">
           {(
-            [
-              { href: props.twitterLink, icon: TwitterLogoIcon },
-              { href: props.linkedinLink, icon: LinkedInLogoIcon },
-              { href: props.githubLink, icon: GitHubLogoIcon },
-            ] as const
+            [{ href: props.linkedinLink, icon: LinkedInLogoIcon }] as const
           ).map((link, index) => (
             <Link
               href={link.href}

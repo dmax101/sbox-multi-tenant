@@ -49,7 +49,7 @@ function AuthButtonsInner() {
         href="/dashboard"
         className={buttonVariants({ variant: "default" })}
       >
-        Dashboard
+        Área do Cliente
       </Link>
     );
   } else {

@@ -14,6 +14,8 @@ const RouteDebbuger = () => {
 
     // Pega informações do usuario logado
     const user = useUser();
+    console.log(user);
+    
 
     useEffect(()=> {
         const url = `${pathname}?${searchParams}`
