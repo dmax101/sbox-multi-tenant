@@ -4,7 +4,6 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import { useEffect } from 'react';
 import { useUser } from "@stackframe/stack";
 
-
 const RouteDebbuger = () => {
   
     // Acessa o caminho (pathname) atual
@@ -14,12 +13,9 @@ const RouteDebbuger = () => {
 
     // Pega informações do usuario logado
     const user = useUser();
-    console.log(user);
-    
 
     useEffect(()=> {
         const url = `${pathname}?${searchParams}`
-        console.log(url);
     }, [pathname, searchParams])
   
     return (

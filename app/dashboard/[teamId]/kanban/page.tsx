@@ -5,6 +5,7 @@ import {ApplicationsPermissions} from "@/lib/applications/enums/applications.enu
 import {IAppPermissions} from "@/lib/user/interfaces/user.interface";
 import {useUser} from "@stackframe/stack";
 import {useEffect, useState} from "react";
+import KanbanApp from "@/components/kanban/kanban-app";
 
 export default function TodoAppPortal() {
     const user = useUser();
@@ -34,7 +35,7 @@ export default function TodoAppPortal() {
 
     return (
         <div>
-            <TodoApp/>
+            <KanbanApp/>
         </div>
     );
 }

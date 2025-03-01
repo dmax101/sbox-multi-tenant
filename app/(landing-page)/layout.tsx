@@ -14,8 +14,6 @@ export default function Layout(props: { children: React.ReactNode }) {
       <Footer
         builtBy="StudioBox 101"
         builtByLink="https://sbox101.com/"
-        githubLink="https://github.com/stack-auth/stack-template"
-        twitterLink="https://twitter.com/stack_auth"
         linkedinLink="linkedin.com/company/stack-auth"
       />
     </div>
