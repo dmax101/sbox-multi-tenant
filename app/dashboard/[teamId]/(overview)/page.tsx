@@ -9,6 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Graph } from "./graph";
+import RouteDebbuger from "@/components/utils";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -24,6 +25,9 @@ export default function DashboardPage() {
             <h2 className="text-2xl font-bold tracking-tight">Overview</h2>
           </div>
           <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <div>
+              <RouteDebbuger />
+            </div>
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">

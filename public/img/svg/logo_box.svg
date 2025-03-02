@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Camada_2" data-name="Camada 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 311.7 372.67">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #272922;
+        stroke-width: 0px;
+      }
+    </style>
+  </defs>
+  <g id="Camada_1-2" data-name="Camada 1">
+    <g>
+      <g>
+        <circle class="cls-1" cx="154.51" cy="19.34" r="19.34"/>
+        <circle class="cls-1" cx="156.65" cy="243.66" r="19.34"/>
+        <circle class="cls-1" cx="19.34" cy="131.5" r="19.34"/>
+        <circle class="cls-1" cx="292.35" cy="131.5" r="19.34"/>
+        <path class="cls-1" d="M156.68,254.74L5.87,131.55,154.46,8.26l151.4,123.19-149.17,123.29ZM32.81,131.45l123.81,101.13,122.23-101.03L154.56,30.42l-121.75,101.02Z"/>
+      </g>
+      <g>
+        <circle class="cls-1" cx="154.51" cy="129.01" r="19.34"/>
+        <circle class="cls-1" cx="156.65" cy="353.33" r="19.34"/>
+        <circle class="cls-1" cx="19.34" cy="241.17" r="19.34"/>
+        <circle class="cls-1" cx="292.35" cy="241.17" r="19.34"/>
+        <path class="cls-1" d="M156.68,364.41L5.87,241.22l148.58-123.29,151.4,123.19-149.17,123.29ZM32.81,241.12l123.81,101.13,122.23-101.03-124.29-101.13-121.75,101.02Z"/>
+      </g>
+      <rect class="cls-1" x="10.78" y="131.5" width="17.12" height="109.67"/>
+      <rect class="cls-1" x="145.95" y="19.34" width="17.12" height="109.67"/>
+      <rect class="cls-1" x="148.09" y="249.65" width="17.12" height="109.67"/>
+      <rect class="cls-1" x="283.79" y="131.5" width="17.12" height="109.67"/>
+    </g>
+  </g>
+</svg>

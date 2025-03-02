@@ -1,0 +1,13 @@
+.kanban {
+    display: flex;
+    gap: 16px; /* Adjust the gap between columns as needed */
+}
+
+.shad-column {
+    flex: 1;
+    min-width: 200px; /* Adjust the minimum width of columns as needed */
+}
+
+.card {
+    margin-bottom: 8px; /* Adjust the margin between cards as needed */
+}

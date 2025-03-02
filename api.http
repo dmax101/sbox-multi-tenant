@@ -1,0 +1,24 @@
+### Requisição GET
+GET http://localhost:3000/api/hello
+Accept: application/json
+
+### Requisição POST
+POST http://localhost:3000/api/hello
+Content-Type: application/json
+
+{
+  "name": "John Doe"
+}
+
+### Webhook### Requisição POST para o webhook
+POST http://localhost:3000/api/user
+Content-Type: application/json
+
+{
+  "event": "user_signup",
+  "user": {
+    "id": "123456",
+    "name": "John Doe",
+    "email": "johndoe@example.com"
+  }
+}
