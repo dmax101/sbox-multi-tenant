@@ -1,7 +1,7 @@
 "use client";
 
 import TodoApp from "@/components/todo/todo-app";
-import {ApplicationsPermissions} from "@/lib/applications/enums/applications.enum";
+import {ApplicationsPermissionsEnums} from "@/lib/applications/enums/applications.enums";
 import {IAppPermissions} from "@/lib/user/interfaces/user.interface";
 import {useUser} from "@stackframe/stack";
 import {useEffect, useState} from "react";
@@ -14,7 +14,7 @@ export default function TodoAppPortal() {
     const metadata = user?.clientReadOnlyMetadata;
     const appPermissions = metadata?.appPermissions;
     const permissions: IAppPermissions[] = appPermissions?.filter(
-        (app: IAppPermissions) => app.appPermission === ApplicationsPermissions.TODO
+        (app: IAppPermissions) => app.appPermission === ApplicationsPermissionsEnums.TODO
     );
     const permissionWithTeamId = permissions?.find(
         (permission: IAppPermissions) => permission.teamId === selectedTeamId

@@ -1,4 +1,4 @@
 // criar um enum para as aplicações
-export enum ApplicationsPermissions {
+export enum ApplicationsPermissionsEnums {
     TODO = "app_todo:"
 }
