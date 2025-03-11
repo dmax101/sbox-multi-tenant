@@ -59,8 +59,8 @@ const renderMenuItem = (item: MenuItem, itemIndex: number) => {
     if (item.href) {
         return (
             <Link href={item.href} passHref key={itemIndex} legacyBehavior>
-                <a>
-                    <MenubarItem
+                <a className='cursor-pointer'>
+                    <MenubarItem className='cursor-pointer'
                         onClick={item.onClick}
                         disabled={item.disabled}
                     >
@@ -77,6 +77,7 @@ const renderMenuItem = (item: MenuItem, itemIndex: number) => {
             key={itemIndex}
             onClick={item.onClick}
             disabled={item.disabled}
+            className='cursor-pointer'
         >
             {item.label}
             {item.shortcut && <MenubarShortcut>{item.shortcut}</MenubarShortcut>}
@@ -89,7 +90,7 @@ export function GenericMenubar({ menus }: MenubarProps) {
         <Menubar>
             {menus.map((menu, index) => (
                 <MenubarMenu key={index}>
-                    <MenubarTrigger>
+                    <MenubarTrigger className='cursor-pointer'>
                         {menu.icon && <menu.icon className="mr-2 h-5 w-5" />}
                         {menu.label}
                     </MenubarTrigger>
