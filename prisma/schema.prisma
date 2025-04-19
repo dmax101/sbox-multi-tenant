@@ -10,30 +10,152 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = env("DATABASE_POSTGRES_URL")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  title     String   @db.VarChar(255)
-  createdAt DateTime @default(now()) @db.Timestamp(6)
-  content   String?
-  published Boolean  @default(false)
-  authorId  Int
-  User      User     @relation(fields: [authorId], references: [id], onDelete: NoAction, onUpdate: NoAction)
-}
+// datasource db {
+//   provider = "sqlserver"
+//   url      = env("DATABASE_SQL_SERVER_URL")
+// }
 
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  userId Int     @unique
-  User   User    @relation(fields: [userId], references: [id], onDelete: NoAction, onUpdate: NoAction)
+
+model Tenant {
+  id        String   @id @default(uuid()) // Identificador único do tenant
+  name      String   @unique // Nome da empresa
+  domain    String?  @unique // Domínio personalizado (opcional)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  clients          Client[]
+  productionOrders ProductionOrder[]
+  User             User[]
 }
 
 model User {
   id      Int      @id @default(autoincrement())
   name    String?  @db.VarChar(255)
   email   String   @unique @db.VarChar(255)
-  Post    Post[]
-  Profile Profile?
+  profile Profile?
+
+  tenantId String @default(uuid())
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+model Profile {
+  id        Int           @id @default(autoincrement())
+  userId    Int           @unique
+  role      String        @db.VarChar(255)
+  type      ProfileType[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  user User @relation(fields: [userId], references: [id])
+}
+
+enum ProfileType {
+  ADMIN
+  OPERATOR
+  MANAGER
+  SUPERVISOR
+  CLIENT
+}
+
+model Client {
+  id             String     @id @default(uuid())
+  name           String
+  identification String     @unique
+  type           ClientType
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
+
+  productionOrders ProductionOrder[]
+
+  tenantId String @default(uuid())
+  tenant           Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+enum ClientType {
+  INDIVIDUAL
+  COMPANY
+  GOVERNMENT
+  NON_PROFIT
+}
+
+model RawMaterial {
+  id                Int      @id @default(autoincrement())
+  name              String   @db.VarChar(255)
+  lot               String   @db.VarChar(255)
+  unit              String   @db.VarChar(255)
+  quantity          Int      @default(0)
+  rawMaterialTypeId Int
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  materialType     RawMaterialType   @relation(fields: [rawMaterialTypeId], references: [id], onDelete: Cascade)
+  productionOrders ProductionOrder[] @relation(name: "RawMaterialProductionOrder")
+}
+
+model RawMaterialType {
+  id          Int           @id @default(autoincrement())
+  name        String        @db.VarChar(255)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+  RawMaterial RawMaterial[]
+}
+
+model Package {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255)
+  lot       String   @db.VarChar(255)
+  unit      String   @db.VarChar(255)
+  quantity  Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  productionOrders ProductionOrder[] @relation(name: "PackageProductionOrder")
+}
+
+model Equipment {
+  id        Int      @id @default(autoincrement())
+  name      String   @db.VarChar(255)
+  brand     String   @db.VarChar(255)
+  model     String   @db.VarChar(255)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  productionOrders ProductionOrder[] @relation(name: "EquipmentProductionOrder")
+}
+
+model ProductionOrder {
+  id                      Int      @id @default(autoincrement())
+  description             String   @db.VarChar(255)
+  width                   Decimal  @default(0)
+  height                  Decimal  @default(0)
+  lot                     String   @db.VarChar(255)
+  quantityPerRoll         Int      @default(0)
+  diameterCore            Decimal  @default(0)
+  rollSize                Decimal  @default(0)
+  observation             String   @db.VarChar(265)
+  requesterId             Int
+  clientId                String
+  productionResponsibleId Int
+  status                  Status
+  employeeId              Int
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  client      Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  rawMaterial RawMaterial[] @relation(name: "RawMaterialProductionOrder")
+  package     Package[]     @relation(name: "PackageProductionOrder")
+  equipment   Equipment[]   @relation(name: "EquipmentProductionOrder")
+
+  tenantId String @default(uuid())
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+}
+
+enum Status {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
 }
