@@ -1,4 +1,4 @@
-import React, { ReactNode, useState } from 'react';
+import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Card } from '../ui/card';
 import { v4 as uuidv4 } from 'uuid';
@@ -32,7 +32,7 @@ function ShadCard(props: { card: Card, columnId: string, moveCard: (sourceColumn
     });
 
     return (
-        <div ref={ref} className="card">
+        <div  className="card">
             <h3>{props.card.title}</h3>
             <p>{props.card.description}</p>
             <Button onClick={() => props.moveCard(props.columnId, 'targetColumnId', props.card.id)}>Move</Button>
@@ -49,7 +49,7 @@ function ShadColumn(props: { column: Column, moveCard: (sourceColumnId: string, 
     });
 
     return (
-        <div ref={ref} className="shad-column">
+        <div  className="shad-column">
             <h2>{props.column.title}</h2>
             <div className="shad-column-content">
                 {props.column.cards.filter(card => !card.archived).map(card => (

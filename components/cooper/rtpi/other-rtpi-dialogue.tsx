@@ -10,7 +10,7 @@ interface AddRtpiDialogProps {
 const OtherRtpiDialog: React.FC<AddRtpiDialogProps> = ({ isOpen, onClose }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent>
+      <DialogContent className="max-w-4xl min-h-fit max-h-[80%]">
         <DialogTitle>Outros RTPI</DialogTitle>
         <DialogDescription>
           Outros RTPIs forms

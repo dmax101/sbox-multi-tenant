@@ -30,6 +30,16 @@ const navigationItems: SidebarItem[] = [
     },
     {
         type: 'label',
+        name: 'Flexo Label',
+    },
+    {
+        name: "Clientes",
+        href: "/flexo-label",
+        icon: FileTextIcon,
+        type: "item",
+    },
+    {
+        type: 'label',
         name: 'Cooperativa',
     },
     {

@@ -22,7 +22,7 @@ import { Sheet, SheetContent, SheetTrigger } from "./ui/sheet";
 function useSegment(basePath: string) {
   const path = usePathname();
   const result = path.slice(basePath.length, path.length);
-  return result ? result : "/";
+  return result || "/";
 }
 
 type Item = {
@@ -43,11 +43,11 @@ type Label = {
 
 export type SidebarItem = Item | Sep | Label;
 
-function NavItem(props: {
+function NavItem(props: Readonly<{
   item: Item;
   onClick?: () => void;
   basePath: string;
-}) {
+}>) {
   const segment = useSegment(props.basePath);
   const selected = segment === props.item.href;
 
@@ -68,14 +68,12 @@ function NavItem(props: {
   );
 }
 
-function SidebarContent(props: {
+function SidebarContent(props: Readonly<{
   onNavigate?: () => void;
   items: SidebarItem[];
   sidebarTop?: React.ReactNode;
   basePath: string;
-}) {
-  const path = usePathname();
-  const segment = useSegment(props.basePath);
+}>) {
 
   return (
     <div className="flex flex-col h-full items-stretch">
@@ -85,10 +83,10 @@ function SidebarContent(props: {
       <div className="flex flex-grow flex-col gap-2 pt-4 overflow-y-auto">
         {props.items.map((item, index) => {
           if (item.type === "separator") {
-            return <Separator key={index} className="my-2" />;
+            return <Separator key={index + item.type} className="my-2" />;
           } else if (item.type === "item") {
             return (
-              <div key={index} className="flex px-2">
+              <div key={index + item.type} className="flex px-2">
                 <NavItem
                   item={item}
                   onClick={props.onNavigate}
@@ -98,7 +96,7 @@ function SidebarContent(props: {
             );
           } else {
             return (
-              <div key={index} className="flex my-2">
+              <div key={index + item.type} className="flex my-2">
                 <div className="flex-grow justify-start text-sm font-medium text-zinc-500 px-2">
                   {item.name}
                 </div>
@@ -115,7 +113,7 @@ function SidebarContent(props: {
 
 export type HeaderBreadcrumbItem = { title: string; href: string };
 
-function HeaderBreadcrumb(props: { items: SidebarItem[], baseBreadcrumb?: HeaderBreadcrumbItem[], basePath: string }) {
+function HeaderBreadcrumb(props: Readonly<{ items: SidebarItem[], baseBreadcrumb?: HeaderBreadcrumbItem[], basePath: string }>) {
   const segment = useSegment(props.basePath);
   console.log(segment)
   const item = props.items.find((item) => item.type === 'item' && item.href === segment);
@@ -126,10 +124,10 @@ function HeaderBreadcrumb(props: { items: SidebarItem[], baseBreadcrumb?: Header
       <BreadcrumbList>
         {props.baseBreadcrumb?.map((item, index) => (
           <>
-            <BreadcrumbItem key={index}>
+            <BreadcrumbItem key={index + item.title}>
               <BreadcrumbLink href={item.href}>{item.title}</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator key={`separator-${index}`} />
+            <BreadcrumbSeparator key={`separator-${index + item.title}`} />
           </>
         ))}
 
@@ -141,13 +139,13 @@ function HeaderBreadcrumb(props: { items: SidebarItem[], baseBreadcrumb?: Header
   );
 }
 
-export default function SidebarLayout(props: {
+export default function SidebarLayout(props: Readonly<{
   children?: React.ReactNode;
   baseBreadcrumb?: HeaderBreadcrumbItem[];
   items: SidebarItem[];
   sidebarTop?: React.ReactNode;
   basePath: string;
-}) {
+}>) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
 
