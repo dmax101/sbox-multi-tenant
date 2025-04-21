@@ -8,7 +8,6 @@ import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Input, InputProps } from "@/components/ui/input";
-import { ClientType } from "@prisma/client";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -26,6 +25,7 @@ import _ from "lodash";
 import { ClientFieldTypes } from "./client-field-type";
 import InputMask from "react-input-mask";
 import { JSX, RefAttributes, useEffect } from "react";
+import { ClientType } from "@/prisma/app/generated/prisma/client";
 
 interface AddFlexoLabelDialogProps {
   isOpen: boolean;
