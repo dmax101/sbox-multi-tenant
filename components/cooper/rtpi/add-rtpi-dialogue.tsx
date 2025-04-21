@@ -28,7 +28,7 @@ interface AddRtpiDialogProps {
 const AddRtpiDialog: React.FC<AddRtpiDialogProps> = ({ isOpen, onClose }) => {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl h-[80%]">
+      <DialogContent className="max-w-4xl min-h-fit max-h-[80%]">
         <div className="h-fit">
           <DialogTitle className="mb-4 text-2xl">Adicionar RTPI</DialogTitle>
           <DialogDescription>
