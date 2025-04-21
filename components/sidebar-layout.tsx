@@ -134,12 +134,18 @@ function HeaderBreadcrumb(
     <Breadcrumb>
       <BreadcrumbList>
         {props.baseBreadcrumb?.map((item, index) => (
-          <>
+          <div
+            key={index + item.title}
+            className="hidden md:flex align-middle items-center"
+          >
             <BreadcrumbItem key={index + item.title}>
               <BreadcrumbLink href={item.href}>{item.title}</BreadcrumbLink>
             </BreadcrumbItem>
-            <BreadcrumbSeparator key={`separator-${index + item.title}`} />
-          </>
+            <BreadcrumbSeparator
+              key={`separator-${index + item.title}`}
+              className="ml-3"
+            />
+          </div>
         ))}
 
         <BreadcrumbItem>
