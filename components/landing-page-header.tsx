@@ -65,14 +65,14 @@ function AuthButtons() {
   );
 }
 
-function MobileItems(props: NavProps) {
+function MobileItems(props: Readonly<NavProps>) {
   return (
     <div className="fixed inset-0 top-16 z-50 grid h-[calc(100vh-4rem)] grid-flow-row auto-rows-max overflow-auto p-6 pb-32 animate-in slide-in-from-bottom-80 md:hidden">
       <div className="relative z-20 grid gap-6 rounded-md bg-popover p-4 text-popover-foreground shadow-md">
         <nav className="grid grid-flow-row auto-rows-max text-sm">
           {props.items?.map((item, index) => (
             <Link
-              key={index}
+              key={index + item.title}
               href={item.disabled ? "#" : item.href}
               className={cn(
                 "flex w-full items-center rounded-md p-2 text-sm font-medium hover:underline",
@@ -94,14 +94,14 @@ function MobileItems(props: NavProps) {
   );
 }
 
-function DesktopItems(props: NavProps) {
+function DesktopItems(props: Readonly<NavProps>) {
   const segment = useSelectedLayoutSegment();
 
   return (
     <nav className="hidden gap-6 md:flex">
       {props.items?.map((item, index) => (
         <Link
-          key={index}
+          key={index + item.title}
           href={item.disabled ? "#" : item.href}
           className={cn(
             "flex items-center text-lg font-medium transition-colors hover:text-foreground/80 sm:text-sm",
@@ -120,7 +120,7 @@ function DesktopItems(props: NavProps) {
   );
 }
 
-export function LandingPageHeader(props: NavProps) {
+export function LandingPageHeader(props: Readonly<NavProps>) {
   const [showMobileMenu, setShowMobileMenu] = React.useState<boolean>(false);
 
   return (

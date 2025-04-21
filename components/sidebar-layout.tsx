@@ -43,11 +43,13 @@ type Label = {
 
 export type SidebarItem = Item | Sep | Label;
 
-function NavItem(props: Readonly<{
-  item: Item;
-  onClick?: () => void;
-  basePath: string;
-}>) {
+function NavItem(
+  props: Readonly<{
+    item: Item;
+    onClick?: () => void;
+    basePath: string;
+  }>
+) {
   const segment = useSegment(props.basePath);
   const selected = segment === props.item.href;
 
@@ -68,13 +70,14 @@ function NavItem(props: Readonly<{
   );
 }
 
-function SidebarContent(props: Readonly<{
-  onNavigate?: () => void;
-  items: SidebarItem[];
-  sidebarTop?: React.ReactNode;
-  basePath: string;
-}>) {
-
+function SidebarContent(
+  props: Readonly<{
+    onNavigate?: () => void;
+    items: SidebarItem[];
+    sidebarTop?: React.ReactNode;
+    basePath: string;
+  }>
+) {
   return (
     <div className="flex flex-col h-full items-stretch">
       <div className="h-14 flex items-center px-2 shrink-0 mr-10 md:mr-0 border-b">
@@ -113,11 +116,19 @@ function SidebarContent(props: Readonly<{
 
 export type HeaderBreadcrumbItem = { title: string; href: string };
 
-function HeaderBreadcrumb(props: Readonly<{ items: SidebarItem[], baseBreadcrumb?: HeaderBreadcrumbItem[], basePath: string }>) {
+function HeaderBreadcrumb(
+  props: Readonly<{
+    items: SidebarItem[];
+    baseBreadcrumb?: HeaderBreadcrumbItem[];
+    basePath: string;
+  }>
+) {
   const segment = useSegment(props.basePath);
-  console.log(segment)
-  const item = props.items.find((item) => item.type === 'item' && item.href === segment);
-  const title: string | undefined = (item as any)?.name
+  console.log(segment);
+  const item = props.items.find(
+    (item) => item.type === "item" && item.href === segment
+  );
+  const title: string | undefined = (item as any)?.name;
 
   return (
     <Breadcrumb>
@@ -139,25 +150,35 @@ function HeaderBreadcrumb(props: Readonly<{ items: SidebarItem[], baseBreadcrumb
   );
 }
 
-export default function SidebarLayout(props: Readonly<{
-  children?: React.ReactNode;
-  baseBreadcrumb?: HeaderBreadcrumbItem[];
-  items: SidebarItem[];
-  sidebarTop?: React.ReactNode;
-  basePath: string;
-}>) {
+export default function SidebarLayout(
+  props: Readonly<{
+    children?: React.ReactNode;
+    baseBreadcrumb?: HeaderBreadcrumbItem[];
+    items: SidebarItem[];
+    sidebarTop?: React.ReactNode;
+    basePath: string;
+  }>
+) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { resolvedTheme, setTheme } = useTheme();
 
   return (
     <div className="w-full flex">
       <div className="flex-col border-r w-[240px] h-screen sticky top-0 hidden md:flex">
-        <SidebarContent items={props.items} sidebarTop={props.sidebarTop} basePath={props.basePath} />
+        <SidebarContent
+          items={props.items}
+          sidebarTop={props.sidebarTop}
+          basePath={props.basePath}
+        />
       </div>
       <div className="flex flex-col flex-grow w-0">
         <div className="h-14 border-b flex items-center justify-between sticky top-0 bg-white dark:bg-black z-10 px-4 md:px-6">
           <div className="hidden md:flex">
-            <HeaderBreadcrumb baseBreadcrumb={props.baseBreadcrumb} basePath={props.basePath} items={props.items} />
+            <HeaderBreadcrumb
+              baseBreadcrumb={props.baseBreadcrumb}
+              basePath={props.basePath}
+              items={props.items}
+            />
           </div>
 
           <div className="flex md:hidden items-center">
@@ -179,7 +200,11 @@ export default function SidebarLayout(props: Readonly<{
             </Sheet>
 
             <div className="ml-4 flex md:hidden">
-              <HeaderBreadcrumb baseBreadcrumb={props.baseBreadcrumb} basePath={props.basePath} items={props.items} />
+              <HeaderBreadcrumb
+                baseBreadcrumb={props.baseBreadcrumb}
+                basePath={props.basePath}
+                items={props.items}
+              />
             </div>
           </div>
 
