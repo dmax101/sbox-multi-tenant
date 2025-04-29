@@ -87,9 +87,7 @@ const AddFlexoLabelDialog: React.FC<AddFlexoLabelDialogProps> = ({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("Form values:", values);
-  }
+  function onSubmit(values: z.infer<typeof formSchema>) {}
 
   function handleTypeInfo(value: string) {
     form.setValue("identification", undefined);

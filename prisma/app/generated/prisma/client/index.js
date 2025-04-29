@@ -239,7 +239,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "d:\\project\\studioBox101\\sbox-multi-tenant\\prisma\\app\\generated\\prisma\\client",
+      "value": "D:\\project\\studioBox101\\sbox-multi-tenant\\prisma\\app\\generated\\prisma\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -253,11 +253,11 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "d:\\project\\studioBox101\\sbox-multi-tenant\\prisma\\schema.prisma",
+    "sourceFilePath": "D:\\project\\studioBox101\\sbox-multi-tenant\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../../../.env"
   },
   "relativePath": "../../../..",
@@ -267,12 +267,11 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_POSTGRES_URL",
-        "value": null
+        "value": "postgresql://postgres:postgres@server.local:5432/sbox?schema=public"
       }
     }
   },
