@@ -7,40 +7,29 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { Input, InputProps } from "@/components/ui/input";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import _ from "lodash";
-import { ClientFieldTypes } from "./client-field-type";
-import InputMask from "react-input-mask";
-import { JSX, RefAttributes, useEffect } from "react";
+import { Form } from "@/components/ui/form";
 import { ClientType } from "@/prisma/app/generated/prisma/client";
 
-interface AddFlexoLabelDialogProps {
+interface AddFlexoLabelDialogProps<T = any> {
   isOpen: boolean;
   onClose: () => void;
+  client?: T; // Cliente existente (opcional, genérico)
 }
 
-const AddFlexoLabelDialog: React.FC<AddFlexoLabelDialogProps> = ({
+const AddFlexoLabelDialog = <T,>({
   isOpen,
   onClose,
-}) => {
+  client,
+}: AddFlexoLabelDialogProps<T>) => {
   const clientType: ClientType[] = Object.values(ClientType);
 
   const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
   const cnpjRegex = /^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$/;
 
+  // O formSchema pode ser definido posteriormente
   const formSchema = z.object({
     id: z.string().uuid().optional(),
     name: z
@@ -77,7 +66,7 @@ const AddFlexoLabelDialog: React.FC<AddFlexoLabelDialogProps> = ({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: client ?? {
       id: undefined,
       name: "",
       identification: undefined,
@@ -87,29 +76,27 @@ const AddFlexoLabelDialog: React.FC<AddFlexoLabelDialogProps> = ({
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {}
-
-  function handleTypeInfo(value: string) {
-    form.setValue("identification", undefined);
+  function onSubmit(values: z.infer<typeof formSchema>) {
+    if (client) {
+      console.log("Editando cliente:", values);
+      // Lógica para editar o cliente existente
+    } else {
+      console.log("Adicionando novo cliente:", values);
+      // Lógica para adicionar um novo cliente
+    }
   }
-
-  const { watch, setValue } = form;
-
-  const typeValue = watch("type");
-
-  useEffect(() => {
-    setValue("identification", undefined);
-  }, [typeValue, setValue]);
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-4xl min-h-fit max-h-[80%]">
         <div className="h-fit">
           <DialogTitle className="mb-4 text-2xl">
-            Adicionar novo cliente
+            {client ? "Editar Cliente" : "Adicionar Novo Cliente"}
           </DialogTitle>
           <DialogDescription>
-            Formulário para adicionar um novo cliente.
+            {client
+              ? "Atualize as informações do cliente."
+              : "Formulário para adicionar um novo cliente."}
           </DialogDescription>
           <Separator className="my-4 w-full" />
         </div>
@@ -119,106 +106,10 @@ const AddFlexoLabelDialog: React.FC<AddFlexoLabelDialogProps> = ({
               onSubmit={form.handleSubmit(onSubmit)}
               className="space-y-8 px-1"
             >
-              <FormField
-                control={form.control}
-                name="name"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Nome</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Digite o nome do cliente"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormDescription>Nome do cliente/empresa.</FormDescription>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="type"
-                render={({ field }) => (
-                  <FormItem className="space-y-3">
-                    <FormLabel>Selecione o tipo do cliente.</FormLabel>
-                    <FormControl>
-                      <RadioGroup
-                        onValueChange={(value) => {
-                          field.onChange(value);
-                          handleTypeInfo(value);
-                        }}
-                        defaultValue={field.value}
-                        className="flex flex-col space-y-1"
-                      >
-                        {clientType.map((value: string) => {
-                          return (
-                            <FormItem
-                              className="flex items-center space-x-3 space-y-0"
-                              key={value}
-                            >
-                              <FormControl>
-                                <RadioGroupItem value={value} />
-                              </FormControl>
-                              <FormLabel className="font-normal">
-                                {_.startCase(value.toLowerCase())}
-                              </FormLabel>
-                            </FormItem>
-                          );
-                        })}
-                      </RadioGroup>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {(form.watch("type") === ClientType.COMPANY ||
-                form.watch("type") === ClientType.INDIVIDUAL) && (
-                <FormField
-                  control={form.control}
-                  name="identification"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Identificação</FormLabel>
-                      <FormControl>
-                        <InputMask
-                          mask={
-                            form.watch("type") === ClientType.COMPANY
-                              ? "99.999.999/9999-99" // Máscara para CNPJ
-                              : "999.999.999-99" // Máscara para CPF
-                          }
-                          value={field.value ?? ""}
-                          onChange={field.onChange}
-                        >
-                          {(
-                            inputProps: JSX.IntrinsicAttributes &
-                              InputProps &
-                              RefAttributes<HTMLInputElement>
-                          ) => (
-                            <Input
-                              {...inputProps}
-                              placeholder={
-                                form.watch("type") === ClientType.COMPANY
-                                  ? "00.000.000/0000-00"
-                                  : "000.000.000-00"
-                              }
-                            />
-                          )}
-                        </InputMask>
-                      </FormControl>
-                      <FormDescription>
-                        Informe o{" "}
-                        {form.watch("type") === ClientType.COMPANY
-                          ? ClientFieldTypes.CNPJ
-                          : ClientFieldTypes.CPF}{" "}
-                        do cliente.
-                      </FormDescription>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )}
-              <Button type="submit">Submit</Button>
+              {/* Campos do formulário */}
+              <Button type="submit">
+                {client ? "Salvar Alterações" : "Adicionar Cliente"}
+              </Button>
             </form>
           </Form>
         </ScrollArea>

@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { MoreHorizontal } from "lucide-react";
+import FlxLbAddEditClientDialog from "@/components/flexo-label/client/add-edit-client-dialog";
 
 export interface PageClientProps {
   data: {
@@ -117,6 +118,12 @@ const Dialogs = () => {
       <AddFlexoLabelDialog
         isOpen={isDialogOpen(FlexoLabelEnum.ADD_FLEXO_LABEL_DIALOG)}
         onClose={() => closeDialog(FlexoLabelEnum.ADD_FLEXO_LABEL_DIALOG)}
+      />
+      <FlxLbAddEditClientDialog
+        isOpen={isDialogOpen(FlexoLabelEnum.FLX_LB_ADD_EDIT_CLIENT_DIALOG)}
+        onClose={() =>
+          closeDialog(FlexoLabelEnum.FLX_LB_ADD_EDIT_CLIENT_DIALOG)
+        }
       />
       {/* Adicione outros diálogos aqui */}
     </>
