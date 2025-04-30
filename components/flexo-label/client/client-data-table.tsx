@@ -32,6 +32,7 @@ export function ClientDataTable<TData, TValue>({
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    enableHiding: true,
   });
 
   return (

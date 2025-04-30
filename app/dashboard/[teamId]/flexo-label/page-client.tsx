@@ -1,13 +1,10 @@
 "use client";
-
-import React from "react";
 import {
   DialogProvider,
   useDialog,
 } from "../../../../components/_providers/dialogue-provider";
 import MenuFlexoLabel from "@/components/flexo-label/client/menu-flexo-label";
 import { FlexoLabelEnum } from "@/lib/applications/enums/flexo-label/flexo-label.enums";
-import AddFlexoLabelDialog from "@/components/flexo-label/client/add-flexo-label-dialog";
 import { Client } from "../../../../prisma/app/generated/prisma/client/index";
 import { ColumnDef } from "@tanstack/react-table";
 import { ClientDataTable } from "../../../../components/flexo-label/client/client-data-table";
@@ -30,75 +27,41 @@ export interface PageClientProps {
   };
 }
 
-export const columns: ColumnDef<Client>[] = [
-  {
-    accessorKey: "id",
-    header: "ID",
-  },
-  {
-    accessorKey: "name",
-    header: "Name",
-  },
-  {
-    accessorKey: "identification",
-    header: "Identification",
-  },
-  {
-    accessorKey: "type",
-    header: "Type",
-  },
-  {
-    accessorKey: "createdAt",
-    header: "Created At",
-    cell: ({ row }) => {
-      const formatedDate = moment(row.getValue("createdAt")).format(
-        "DD/MM/YYYY HH:mm:ss"
-      );
-
-      return <div>{formatedDate}</div>;
-    },
-  },
-  {
-    accessorKey: "updatedAt",
-    header: "Updated At",
-    cell: ({ row }) => {
-      const formatedDate = moment(row.getValue("updatedAt")).format(
-        "DD/MM/YYYY HH:mm:ss"
-      );
-
-      return <div>{formatedDate}</div>;
-    },
-  },
-  {
-    accessorKey: "actions",
-    header: "Actions",
-    cell: ({ row }) => {
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(row.getValue("id"))}
-            >
-              Copy payment ID
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
-
 function PageClient({ data }: Readonly<PageClientProps>) {
+  const columns: ColumnDef<Client>[] = [
+    {
+      accessorKey: "id",
+      header: "ID",
+    },
+    {
+      accessorKey: "name",
+      header: "Name",
+    },
+    {
+      accessorKey: "identification",
+      header: "Identification",
+    },
+    {
+      accessorKey: "type",
+      header: "Type",
+    },
+    {
+      accessorKey: "createdAt",
+      header: "Created At",
+      cell: ({ row }) => renderCreatedAtCell(row),
+    },
+    {
+      accessorKey: "updatedAt",
+      header: "Updated At",
+      cell: ({ row }) => renderUpdatedAtCell(row),
+    },
+    {
+      accessorKey: "actions",
+      header: "Actions",
+      cell: ({ row }) => renderActionsCell(row),
+    },
+  ];
+
   return (
     <DialogProvider>
       <MenuFlexoLabel />
@@ -110,21 +73,69 @@ function PageClient({ data }: Readonly<PageClientProps>) {
   );
 }
 
-const Dialogs = () => {
-  const { isDialogOpen, closeDialog } = useDialog();
+function renderCreatedAtCell(row: any) {
+  return <CreatedAtCell value={row.getValue("createdAt")} />;
+}
+
+function renderUpdatedAtCell(row: any) {
+  return <UpdatedAtCell value={row.getValue("updatedAt")} />;
+}
+
+function renderActionsCell(row: any) {
+  return <ActionsCell row={row} />;
+}
+
+function CreatedAtCell({ value }: Readonly<{ value: string }>) {
+  return <div>{moment(value).format("DD/MM/YYYY HH:mm:ss")}</div>;
+}
+
+function UpdatedAtCell({ value }: Readonly<{ value: string }>) {
+  return <div>{moment(value).format("DD/MM/YYYY HH:mm:ss")}</div>;
+}
+
+function ActionsCell({ row }: Readonly<{ row: any }>) {
+  const { openDialog } = useDialog();
 
   return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="ghost" className="h-8 w-8 p-0">
+          <span className="sr-only">Open menu</span>
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuLabel>Actions</DropdownMenuLabel>
+        <DropdownMenuItem
+          onClick={() => navigator.clipboard.writeText(row.getValue("id"))}
+        >
+          Copy client ID
+        </DropdownMenuItem>
+        <DropdownMenuSeparator />
+        <DropdownMenuItem
+          onClick={() =>
+            openDialog(FlexoLabelEnum.FLX_LB_ADD_EDIT_CLIENT_DIALOG, {
+              id: row.getValue("id"),
+              name: row.getValue("name"),
+              identification: row.getValue("identification"),
+              type: row.getValue("type"),
+              createdAt: row.getValue("createdAt"),
+              updatedAt: row.getValue("updatedAt"),
+            })
+          }
+        >
+          Edit
+        </DropdownMenuItem>
+        <DropdownMenuItem>Delete</DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  );
+}
+
+const Dialogs = () => {
+  return (
     <>
-      <AddFlexoLabelDialog
-        isOpen={isDialogOpen(FlexoLabelEnum.ADD_FLEXO_LABEL_DIALOG)}
-        onClose={() => closeDialog(FlexoLabelEnum.ADD_FLEXO_LABEL_DIALOG)}
-      />
-      <FlxLbAddEditClientDialog
-        isOpen={isDialogOpen(FlexoLabelEnum.FLX_LB_ADD_EDIT_CLIENT_DIALOG)}
-        onClose={() =>
-          closeDialog(FlexoLabelEnum.FLX_LB_ADD_EDIT_CLIENT_DIALOG)
-        }
-      />
+      <FlxLbAddEditClientDialog />
       {/* Adicione outros diálogos aqui */}
     </>
   );

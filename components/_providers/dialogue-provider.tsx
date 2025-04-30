@@ -1,34 +1,52 @@
 import React, { createContext, useContext, useState } from "react";
 
-interface DialogContextType {
-  openDialog: (dialogName: string) => void;
-  closeDialog: (dialogName: string) => void;
-  isDialogOpen: (dialogName: string) => boolean;
+interface DialogState {
+  [key: string]: {
+    isOpen: boolean;
+    data?: any; // Dados associados ao diálogo
+  };
 }
 
-const DialogContext = createContext<DialogContextType | undefined>(undefined);
-
-interface DialogProviderProps {
-  children: React.ReactNode;
+interface DialogContextProps {
+  openDialog: (dialogKey: string, data?: any) => void;
+  closeDialog: (dialogKey: string) => void;
+  isDialogOpen: (dialogKey: string) => boolean;
+  getDialogData: (dialogKey: string) => any; // Recuperar os dados do diálogo
 }
 
-export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
-  const [openDialogs, setOpenDialogs] = useState<{ [key: string]: boolean }>(
-    {}
-  );
+const DialogContext = createContext<DialogContextProps | undefined>(undefined);
 
-  const openDialog = (dialogName: string) => {
-    setOpenDialogs((prev) => ({ ...prev, [dialogName]: true }));
+export const DialogProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [dialogs, setDialogs] = useState<DialogState>({});
+
+  const openDialog = (dialogKey: string, data: any = null) => {
+    setDialogs((prev) => ({
+      ...prev,
+      [dialogKey]: { isOpen: true, data },
+    }));
   };
 
-  const closeDialog = (dialogName: string) => {
-    setOpenDialogs((prev) => ({ ...prev, [dialogName]: false }));
+  const closeDialog = (dialogKey: string) => {
+    setDialogs((prev) => ({
+      ...prev,
+      [dialogKey]: { isOpen: false, data: undefined },
+    }));
   };
 
-  const isDialogOpen = (dialogName: string) => !!openDialogs[dialogName];
+  const isDialogOpen = (dialogKey: string) => {
+    return dialogs[dialogKey]?.isOpen || false;
+  };
+
+  const getDialogData = (dialogKey: string) => {
+    return dialogs[dialogKey]?.data;
+  };
 
   return (
-    <DialogContext.Provider value={{ openDialog, closeDialog, isDialogOpen }}>
+    <DialogContext.Provider
+      value={{ openDialog, closeDialog, isDialogOpen, getDialogData }}
+    >
       {children}
     </DialogContext.Provider>
   );
@@ -37,7 +55,7 @@ export const DialogProvider: React.FC<DialogProviderProps> = ({ children }) => {
 export const useDialog = () => {
   const context = useContext(DialogContext);
   if (!context) {
-    throw new Error("useDialog must be used within a DialogProvider");
+    throw new Error("useDialog must be used within a DialogueProvider");
   }
   return context;
 };

@@ -1,4 +1,4 @@
-import { RefAttributes } from "react";
+import { RefAttributes, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,18 +27,16 @@ import { Input, InputProps } from "@/components/ui/input";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 import { ClientFieldTypes } from "./client-field-type";
+import { useDialog } from "@/components/_providers/dialogue-provider";
+import { FlexoLabelEnum } from "@/lib/applications/enums/flexo-label/flexo-label.enums";
 
-interface FlxLbAddEditClientDialogProps<T = any> {
-  isOpen: boolean;
-  onClose: () => void;
-  client?: T; // Cliente existente (opcional, genérico)
-}
+const FlxLbAddEditClientDialog = () => {
+  const dialogRef = FlexoLabelEnum.FLX_LB_ADD_EDIT_CLIENT_DIALOG;
+  const { isDialogOpen, closeDialog, getDialogData } = useDialog();
 
-const FlxLbAddEditClientDialog = <T,>({
-  isOpen,
-  onClose,
-  client,
-}: FlxLbAddEditClientDialogProps<T>) => {
+  const isOpen = isDialogOpen(dialogRef);
+  const dialogData = getDialogData(dialogRef);
+
   const clientType: ClientType[] = Object.values(ClientType);
 
   const cpfRegex = /^\d{3}\.\d{3}\.\d{3}-\d{2}$/;
@@ -81,7 +79,7 @@ const FlxLbAddEditClientDialog = <T,>({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: client ?? {
+    defaultValues: dialogData ?? {
       id: undefined,
       name: "",
       identification: undefined,
@@ -91,14 +89,20 @@ const FlxLbAddEditClientDialog = <T,>({
     },
   });
 
+  useEffect(() => {
+    if (dialogData) {
+      form.reset(dialogData);
+    }
+  }, [dialogData, form]);
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (client) {
+    if (dialogData) {
       console.log("Editando cliente:", values);
-      // Lógica para editar o cliente existente
     } else {
       console.log("Adicionando novo cliente:", values);
-      // Lógica para adicionar um novo cliente
     }
+
+    closeDialog(dialogRef);
   }
 
   function handleTypeInfo(value: string) {
@@ -106,14 +110,14 @@ const FlxLbAddEditClientDialog = <T,>({
   }
 
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
+    <Dialog open={isOpen} onOpenChange={() => closeDialog(dialogRef)}>
       <DialogContent className="max-w-4xl min-h-fit max-h-[80%]">
         <div className="h-fit">
           <DialogTitle className="mb-4 text-2xl">
-            {client ? "Editar Cliente" : "Adicionar Novo Cliente"}
+            {dialogData ? "Editar Cliente" : "Adicionar Novo Cliente"}
           </DialogTitle>
           <DialogDescription>
-            {client
+            {dialogData
               ? "Atualize as informações do cliente."
               : "Formulário para adicionar um novo cliente."}
           </DialogDescription>
@@ -225,7 +229,7 @@ const FlxLbAddEditClientDialog = <T,>({
                 />
               )}
               <Button type="submit">
-                {client ? "Salvar Alterações" : "Adicionar Cliente"}
+                {dialogData ? "Salvar Alterações" : "Adicionar Cliente"}
               </Button>
             </form>
           </Form>

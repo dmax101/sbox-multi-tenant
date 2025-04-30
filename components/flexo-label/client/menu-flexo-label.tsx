@@ -4,7 +4,7 @@ import { GenericMenubar, Menu } from "@/components/menu-bar-generic";
 import { useDialog } from "@/components/_providers/dialogue-provider";
 import { FlexoLabelEnum } from "@/lib/applications/enums/flexo-label/flexo-label.enums";
 
-function MenuRtpi() {
+function MenuFlexoLabel() {
   const { openDialog } = useDialog();
 
   const menus: Menu[] = [
@@ -24,6 +24,20 @@ function MenuRtpi() {
             openDialog(FlexoLabelEnum.FLX_LB_ADD_EDIT_CLIENT_DIALOG),
           group: "cliente",
         },
+        {
+          label: "Editar",
+          shortcut: "⌘E",
+          onClick: () =>
+            openDialog(FlexoLabelEnum.FLX_LB_ADD_EDIT_CLIENT_DIALOG, {
+              id: "288ba4c8-f1c6-434e-98cb-2cf03d661250",
+              name: "Danilo Ribeiro",
+              identification: "12345678900",
+              type: "INDIVIDUAL",
+              createdAt: new Date("29/04/2025 00:54:09"),
+              updatedAt: new Date("29/04/2025 00:54:09"),
+            }),
+          group: "cliente",
+        },
       ],
     },
   ];
@@ -37,4 +51,4 @@ function MenuRtpi() {
   );
 }
 
-export default MenuRtpi;
+export default MenuFlexoLabel;
