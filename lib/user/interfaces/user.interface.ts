@@ -1,8 +1,8 @@
-import { ApplicationsPermissions } from "@/lib/applications/enums/applications.enum";
+import { ApplicationsPermissionsEnums } from "@/lib/applications/enums/applications.enums";
 
 export interface IAppPermissions {
     teamId: string;
-    appPermission: ApplicationsPermissions;
+    appPermission: ApplicationsPermissionsEnums;
 }
 
 export interface IUserServerMetadata {

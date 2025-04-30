@@ -3,17 +3,11 @@
 import SidebarLayout, {SidebarItem} from "@/components/sidebar-layout";
 import {SelectedTeamSwitcher, useUser} from "@stackframe/stack";
 import {
-    BadgePercent,
-    BarChart4,
     Columns3,
     FileTextIcon,
     Globe,
     ListTodo,
-    Locate,
     Settings2,
-    ShoppingBag,
-    ShoppingCart,
-    Users
 } from "lucide-react";
 import {useParams, useRouter} from "next/navigation";
 
@@ -35,9 +29,13 @@ const navigationItems: SidebarItem[] = [
         type: "item",
     },
     {
-        name: "Kanban",
-        href: "/kanban",
-        icon: Columns3,
+        type: 'label',
+        name: 'Flexo Label',
+    },
+    {
+        name: "Clientes",
+        href: "/flexo-label",
+        icon: FileTextIcon,
         type: "item",
     },
     {
@@ -62,7 +60,7 @@ const navigationItems: SidebarItem[] = [
     },
 ];
 
-export default function Layout(props: { children: React.ReactNode }) {
+export default function Layout(props: Readonly<{ children: React.ReactNode }>) {
     const params = useParams<{ teamId: string }>();
     const user = useUser({or: 'redirect'});
     const team = user.useTeam(params.teamId);

@@ -1,8 +1,10 @@
-export function FeatureGridItem(props: {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-}) {
+export function FeatureGridItem(
+  props: Readonly<{
+    icon: React.ReactNode;
+    title: string;
+    description: string;
+  }>
+) {
   return (
     <div className="relative overflow-hidden rounded-lg border bg-background p-2">
       <div className="flex h-[180px] flex-col rounded-md p-6 gap-4">
@@ -16,24 +18,24 @@ export function FeatureGridItem(props: {
   );
 }
 
-export function FeatureGrid(props: {
-  title: string;
-  subtitle: string;
-  items: {
-    icon: React.ReactNode;
+export function FeatureGrid(
+  props: Readonly<{
     title: string;
-    description: string;
-  }[];
-}) {
+    subtitle: string;
+    items: {
+      icon: React.ReactNode;
+      title: string;
+      description: string;
+    }[];
+  }>
+) {
   return (
     <section
       id="features"
       className="container space-y-6 py-8 md:py-12 lg:py-24"
     >
       <div className="mx-auto flex max-w-6xl flex-col items-center space-y-4 text-center">
-        <h2 className="text-3xl md:text-4xl font-semibold">
-          {props.title}
-        </h2>
+        <h2 className="text-3xl md:text-4xl font-semibold">{props.title}</h2>
         <p className="max-w-[85%] text-muted-foreground sm:text-lg">
           {props.subtitle}
         </p>
@@ -41,7 +43,7 @@ export function FeatureGrid(props: {
 
       <div className="mx-auto grid justify-center gap-4 sm:grid-cols-2 md:max-w-5xl md:grid-cols-3">
         {props.items.map((item, index) => (
-          <FeatureGridItem key={index} {...item} />
+          <FeatureGridItem key={index + item.title} {...item} />
         ))}
       </div>
     </section>
